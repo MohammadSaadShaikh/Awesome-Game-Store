@@ -1,0 +1,137 @@
+===================================================================
+GAME STORE BACKEND - API COMMANDS & ENDPOINTS REFERENCE
+===================================================================
+
+[MILESTONE 1 - EXTERNAL API INTEGRATION (CheapShark API Client)]
+
+1. GET STORES
+   - Purpose: Fetches all game store definitions and filters active storefronts (isActive == 1).
+   - CheapShark API Endpoint: GET https://www.cheapshark.com/api/1.0/stores
+   - Internal Client Method: GameDealClientService.getActiveStores()
+
+2. GET TOP DEALS
+   - Purpose: Fetches top discounted video game deals sorted by Deal Rating.
+   - CheapShark API Endpoint: GET https://www.cheapshark.com/api/1.0/deals?pageSize={pageSize}&sortBy=Deal Rating
+   - Internal Client Method: GameDealClientService.getTopDeals(int pageSize)
+
+3. SEARCH DEALS BY TITLE
+   - Purpose: Searches for video game deals matching a given title query.
+   - CheapShark API Endpoint: GET https://www.cheapshark.com/api/1.0/deals?title={title}&pageSize={limit}
+   - Internal Client Method: GameDealClientService.searchDealsByTitle(String title, int limit)
+
+===================================================================
+[MILESTONE 2 - PUBLIC REST CONTROLLERS & DATA ENRICHMENT]
+===================================================================
+
+Base URL: http://localhost:8080
+
+1. GET ALL STORES
+   - Endpoint: GET /api/v1/stores
+   - Description: Retrieves all active game stores with full image URLs (banner, logo, icon).
+   - Curl Example:
+       curl -s "http://localhost:8080/api/v1/stores"
+
+2. GET TOP DEALS
+   - Endpoint: GET /api/v1/deals
+   - Query Parameters: limit (default 20), sortBy (default "Deal Rating").
+   - Curl Example:
+       curl -s "http://localhost:8080/api/v1/deals?limit=3"
+
+3. SEARCH DEALS
+   - Endpoint: GET /api/v1/deals/search
+   - Query Parameters: query (required), storeId (optional), maxPrice (optional).
+   - Curl Example:
+       curl -s "http://localhost:8080/api/v1/deals/search?query=Witcher&maxPrice=15.00"
+
+4. COMPARE DEALS ACROSS STORES
+   - Endpoint: GET /api/v1/deals/compare
+   - Query Parameters: title (required).
+   - Curl Example:
+       curl -s "http://localhost:8080/api/v1/deals/compare?title=Cyberpunk%202077"
+
+5. CURRENCY CONVERSION RATES
+   - Endpoint: GET /api/v1/currencies
+   - Description: Returns supported regional currency exchange rates (USD, EUR, GBP, INR, CAD, AUD).
+   - Curl Example:
+       curl -s "http://localhost:8080/api/v1/currencies"
+
+===================================================================
+[MILESTONE 4 - SUPABASE WISHLIST & SCHEDULED PRICE SYNC ENGINE]
+===================================================================
+
+1. ADD GAME TO WISHLIST / TRACK PRICE
+   - Endpoint: POST /api/v1/wishlist
+   - Description: Adds or updates a tracked game price alert. Converts foreign target prices to baseline USD before persisting.
+   - Request JSON Payload:
+       {
+         "userEmail": "gamer@example.com",
+         "gameTitle": "Cyberpunk 2077",
+         "gameId": "202350",
+         "targetPrice": 25.00,
+         "currency": "USD"
+       }
+   - Curl Example:
+       curl -s -X POST "http://localhost:8080/api/v1/wishlist" \
+            -H "Content-Type: application/json" \
+            -d '{"userEmail":"gamer@example.com","gameTitle":"Cyberpunk 2077","targetPrice":25.00,"currency":"USD"}'
+   - Response JSON (201 Created):
+       {
+         "id": 1,
+         "userEmail": "gamer@example.com",
+         "gameTitle": "Cyberpunk 2077",
+         "gameId": "202350",
+         "targetPrice": 25.0,
+         "currentBestPrice": 4.99,
+         "currency": "USD",
+         "bestStore": "Steam",
+         "discountSavings": 80.04,
+         "isTriggered": true,
+         "status": "TARGET MET"
+       }
+
+2. GET USER WISHLIST
+   - Endpoint: GET /api/v1/wishlist
+   - Query Parameters:
+       * email (required): User email address.
+       * currency (optional, default "USD"): Currency code for price conversion (e.g. INR, EUR, GBP).
+   - Curl Example:
+       curl -s "http://localhost:8080/api/v1/wishlist?email=gamer@example.com&currency=INR"
+   - Response JSON (200 OK):
+       [
+         {
+           "id": 1,
+           "userEmail": "gamer@example.com",
+           "gameTitle": "Cyberpunk 2077",
+           "gameId": "202350",
+           "targetPrice": 2087.5,
+           "currentBestPrice": 416.67,
+           "currency": "INR",
+           "bestStore": "Steam",
+           "discountSavings": 80.04,
+           "isTriggered": true,
+           "status": "TARGET MET"
+         }
+       ]
+
+3. DELETE WISHLIST ITEM
+   - Endpoint: DELETE /api/v1/wishlist/{id}
+   - Description: Deletes a tracked game price alert by ID.
+   - Curl Example:
+       curl -s -X DELETE "http://localhost:8080/api/v1/wishlist/1"
+   - Response: 204 No Content
+
+4. MANUAL PRICE SYNC TRIGGER
+   - Endpoint: POST /api/v1/wishlist/sync-now
+   - Description: Manually triggers the Price Sync Engine to re-evaluate all untriggered wishlist items against current live prices.
+   - Curl Example:
+       curl -s -X POST "http://localhost:8080/api/v1/wishlist/sync-now"
+   - Response JSON (200 OK):
+       {
+         "message": "Price sync evaluation completed successfully."
+       }
+
+5. SCHEDULED PRICE MONITOR
+   - Class: com.gamestore.scheduler.PriceSyncScheduler
+   - Cron Schedule: @Scheduled(cron = "${app.price-check.cron:0 0 */6 * * *}")
+   - Behavior: Automatically runs every 6 hours to check untriggered tracked items, updates last checked prices, and logs price alert triggers.
+===================================================================

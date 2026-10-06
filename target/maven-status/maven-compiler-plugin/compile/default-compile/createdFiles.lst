@@ -1,0 +1,11 @@
+com\gamestore\runner\DealFetchStartupRunner.class
+com\gamestore\dto\CheapSharkStoreDto.class
+com\gamestore\dto\CheapSharkStoreDto$StoreImages.class
+com\gamestore\service\GameDealClientService.class
+com\gamestore\service\impl\CheapSharkClientServiceImpl$2.class
+com\gamestore\service\impl\CheapSharkClientServiceImpl$3.class
+com\gamestore\config\RestClientConfig.class
+com\gamestore\dto\CheapSharkDealDto.class
+com\gamestore\GameStoreApplication.class
+com\gamestore\service\impl\CheapSharkClientServiceImpl$1.class
+com\gamestore\service\impl\CheapSharkClientServiceImpl.class

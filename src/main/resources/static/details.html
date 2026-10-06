@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Store Comparison - AWESOME™ Game Store</title>
+  <meta name="description" content="Compare live store prices for your favorite video games across Steam, Epic, GOG, and top storefronts.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- HEADER / NAVBAR -->
+  <header class="navbar">
+    <div class="container navbar__inner">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="index.html" class="awesome-logo" aria-label="Awesome games home">
+          <span aria-hidden="true">
+            AWES<span class="awesome-logo__o">O</span>ME
+          </span>
+          <sup class="awesome-logo__trademark" aria-hidden="true">TM</sup>
+        </a>
+
+        <a href="index.html" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">
+          ← Back to Deals
+        </a>
+      </div>
+
+      <div class="navbar__controls">
+        <select id="currency-select" class="custom-select" aria-label="Select regional currency">
+          <!-- Populated by currency.js -->
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="container">
+    <div id="details-container">
+      <!-- Rendered dynamically by details.js -->
+    </div>
+  </main>
+
+  <!-- TRACK PRICE MODAL -->
+  <div id="track-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Track Price Alert</h3>
+        <button class="modal-close" id="close-track-modal">&times;</button>
+      </div>
+      <form id="track-form">
+        <input type="hidden" id="track-game-title">
+        <input type="hidden" id="track-game-id">
+        <div class="form-group">
+          <label>Game</label>
+          <div id="track-game-name-display" style="font-weight: 700; color: var(--accent-green-bright); font-size: 1.1rem; margin-bottom: 0.5rem;"></div>
+        </div>
+        <div class="form-group">
+          <label for="track-email">Your Email Address</label>
+          <input type="email" id="track-email" placeholder="gamer@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="track-target-price">Target Price (<span class="current-currency-symbol">$</span>)</label>
+          <input type="number" id="track-target-price" step="0.01" min="0" required>
+        </div>
+        <button type="submit" class="btn btn-accent" style="width: 100%; padding: 0.75rem;">Set Price Alert 🔔</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__top">
+        <div class="site-footer__info">
+          <a href="index.html" class="awesome-logo" aria-label="Awesome games home">
+            <span aria-hidden="true">
+              AWES<span class="awesome-logo__o">O</span>ME
+            </span>
+            <sup class="awesome-logo__trademark" aria-hidden="true">TM</sup>
+          </a>
+          <p class="site-footer__disclaimer">
+            AWESOME™ is an autonomous cross-store video game price aggregator powered by Spring Boot 3 & Supabase PostgreSQL. Live store pricing provided via CheapShark API.
+          </p>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.8rem;">Supported Storefronts</h4>
+          <p style="color: var(--text-primary); font-size: 0.88rem; line-height: 1.8;">
+            Steam • Epic Games Store • GOG • Humble Store • GreenManGaming • Fanatical • GamersGate • Gamesplanet
+          </p>
+        </div>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>&copy; 2026 AWESOME™ Inc. All rights reserved.</span>
+        <span>Connected to Supabase DB & CheapShark API v1.0</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/currency.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/details.js"></script>
+</body>
+</html>
