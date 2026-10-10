@@ -36,8 +36,18 @@ const ApiService = (() => {
     return await fetchJson(url);
   }
 
-  async function compareDeals(title) {
-    return await fetchJson(`/deals/compare?title=${encodeURIComponent(title)}`);
+  async function compareDeals(title, gameId = '', steamAppId = '') {
+    let url = `/deals/compare?title=${encodeURIComponent(title)}`;
+    if (gameId) url += `&gameId=${encodeURIComponent(gameId)}`;
+    if (steamAppId) url += `&steamAppId=${encodeURIComponent(steamAppId)}`;
+    return await fetchJson(url);
+  }
+
+  async function getGameInfo(title, gameId = '', steamAppId = '') {
+    let url = `/deals/info?title=${encodeURIComponent(title)}`;
+    if (gameId) url += `&gameId=${encodeURIComponent(gameId)}`;
+    if (steamAppId) url += `&steamAppId=${encodeURIComponent(steamAppId)}`;
+    return await fetchJson(url);
   }
 
   async function addToWishlist(requestPayload) {
@@ -69,6 +79,7 @@ const ApiService = (() => {
     getTopDeals,
     searchDeals,
     compareDeals,
+    getGameInfo,
     addToWishlist,
     getWishlist,
     removeFromWishlist,

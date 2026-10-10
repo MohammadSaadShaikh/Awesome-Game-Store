@@ -15,4 +15,6 @@ public interface DealAggregatorService {
     List<DealResponse> searchDeals(String title, String storeId, Double maxPrice);
 
     GameLookupResponse getGameDealsGrouped(String title);
+
+    GameLookupResponse getGameDealsGrouped(String title, String preferredGameId, String preferredSteamAppId);
 }

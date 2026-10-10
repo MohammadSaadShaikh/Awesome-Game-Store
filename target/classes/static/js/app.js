@@ -65,12 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const query = searchInput.value.trim();
     const storeId = storeSelect.value;
 
+    const headingEl = document.getElementById('deals-grid-heading');
+    const subtitleEl = document.getElementById('deals-grid-subtitle');
+    const trendingBadge = document.getElementById('trending-badge');
+
     showLoading();
 
     try {
       if (query.length > 0) {
+        if (headingEl) headingEl.textContent = `Search Results for "${query}"`;
+        if (subtitleEl) subtitleEl.textContent = 'Showing 1 card per game with lowest price. In-game currency filtered out. Click any game to see all store options.';
+        if (trendingBadge) trendingBadge.textContent = '🔍 Filtered Results';
         currentDeals = await ApiService.searchDeals(query, storeId);
       } else {
+        if (headingEl) headingEl.textContent = '🔥 Real-Time Trending Games & Top Deals';
+        if (subtitleEl) subtitleEl.textContent = 'Live global trends aggregated from Steam Storefront & digital stores. 1 card per game with the lowest available price.';
+        if (trendingBadge) trendingBadge.textContent = '🔴 Live Real-Time Trends';
         currentDeals = await ApiService.getTopDeals(24);
         if (storeId) {
           currentDeals = currentDeals.filter(d => d.storeId === storeId);
@@ -98,18 +108,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const formattedNormal = CurrencyEngine.formatPrice(deal.normalPrice);
       const formattedSale = CurrencyEngine.formatPrice(deal.salePrice);
       const savingsRounded = Math.round(deal.savingsPercent);
+      const compareUrl = `details.html?title=${encodeURIComponent(deal.title)}&gameId=${encodeURIComponent(deal.gameId || '')}&steamAppId=${encodeURIComponent(deal.steamAppId || '')}`;
 
       return `
         <article class="deal-card">
-          <div class="deal-card__thumb">
+          <a href="${compareUrl}" class="deal-card__thumb" title="Click to view details & comparison for ${escapeHtml(deal.title)}">
             <img src="${escapeHtml(deal.thumbnail)}" alt="${escapeHtml(deal.title)}" loading="lazy" onerror="this.src='https://via.placeholder.com/231x87?text=No+Image'">
             ${savingsRounded > 0 ? `<span class="deal-card__badge-discount">-${savingsRounded}% OFF</span>` : ''}
-          </div>
+          </a>
           <div class="deal-card__body">
             <div class="deal-card__store">
-              <span>${escapeHtml(deal.storeName)}</span>
+              <span>Lowest on ${escapeHtml(deal.storeName)}</span>
             </div>
-            <h3 class="deal-card__title" title="${escapeHtml(deal.title)}">${escapeHtml(deal.title)}</h3>
+            <h3 class="deal-card__title" title="${escapeHtml(deal.title)}">
+              <a href="${compareUrl}" class="deal-card__title-link" title="Click to view details & comparison for ${escapeHtml(deal.title)}">
+                ${escapeHtml(deal.title)}
+              </a>
+            </h3>
             
             <div class="deal-card__price-row">
               ${deal.savingsPercent > 0 ? `<span class="deal-card__price-normal">${formattedNormal}</span>` : ''}
@@ -120,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="${deal.storeUrl || getDirectStoreUrl(deal.storeName, deal.storeId, deal.title, deal.steamAppId)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.78rem; padding: 0.45rem 0.5rem;" title="Visit ${escapeHtml(deal.storeName)}">
                 Visit Store ↗
               </a>
-              <a href="details.html?title=${encodeURIComponent(deal.title)}" class="btn btn-outline" style="font-size: 0.78rem; padding: 0.45rem 0.5rem;">
-                Compare
+              <a href="${compareUrl}" class="btn btn-outline" style="font-size: 0.78rem; padding: 0.45rem 0.5rem;" title="Compare prices & view game information">
+                Compare & Info
               </a>
               <button class="btn btn-accent track-btn" 
                       data-title="${escapeHtml(deal.title)}" 

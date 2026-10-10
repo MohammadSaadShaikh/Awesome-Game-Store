@@ -68,6 +68,23 @@
     </div>
   </div>
 
+  <!-- SCREENSHOT LIGHTBOX MODAL -->
+  <div id="screenshot-lightbox" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Screenshot Preview">
+    <div class="lightbox-dialog">
+      <button class="modal-close lightbox-close" id="close-lightbox" aria-label="Close preview">&times;</button>
+      <div class="lightbox-body">
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous screenshot">&#10094;</button>
+        <div class="lightbox-image-wrap">
+          <img id="lightbox-img" src="" alt="Screenshot Full View">
+        </div>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next screenshot">&#10095;</button>
+      </div>
+      <div class="lightbox-footer">
+        <span id="lightbox-counter">1 / 1</span>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container site-footer__inner">

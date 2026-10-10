@@ -7,5 +7,10 @@ public record GameLookupResponse(
         String title,
         String thumbnail,
         double cheapestPrice,
-        List<DealResponse> storeDeals
-) {}
+        List<DealResponse> storeDeals,
+        GameDetailInfo gameInfo
+) {
+    public GameLookupResponse(String gameId, String title, String thumbnail, double cheapestPrice, List<DealResponse> storeDeals) {
+        this(gameId, title, thumbnail, cheapestPrice, storeDeals, null);
+    }
+}

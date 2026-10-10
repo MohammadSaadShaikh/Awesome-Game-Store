@@ -9,6 +9,7 @@ D:\Projects\Game Store\src\main\java\com\gamestore\dto\CheapSharkStoreDto.java
 D:\Projects\Game Store\src\main\java\com\gamestore\dto\request\CreateWishlistRequest.java
 D:\Projects\Game Store\src\main\java\com\gamestore\dto\response\ApiErrorResponse.java
 D:\Projects\Game Store\src\main\java\com\gamestore\dto\response\DealResponse.java
+D:\Projects\Game Store\src\main\java\com\gamestore\dto\response\GameDetailInfo.java
 D:\Projects\Game Store\src\main\java\com\gamestore\dto\response\GameLookupResponse.java
 D:\Projects\Game Store\src\main\java\com\gamestore\dto\response\StoreResponse.java
 D:\Projects\Game Store\src\main\java\com\gamestore\dto\response\WishlistResponse.java
@@ -20,7 +21,9 @@ D:\Projects\Game Store\src\main\java\com\gamestore\runner\DealFetchStartupRunner
 D:\Projects\Game Store\src\main\java\com\gamestore\scheduler\PriceSyncScheduler.java
 D:\Projects\Game Store\src\main\java\com\gamestore\service\DealAggregatorService.java
 D:\Projects\Game Store\src\main\java\com\gamestore\service\GameDealClientService.java
+D:\Projects\Game Store\src\main\java\com\gamestore\service\GameInformationService.java
 D:\Projects\Game Store\src\main\java\com\gamestore\service\impl\CheapSharkClientServiceImpl.java
 D:\Projects\Game Store\src\main\java\com\gamestore\service\impl\DealAggregatorServiceImpl.java
+D:\Projects\Game Store\src\main\java\com\gamestore\service\impl\GameInformationServiceImpl.java
 D:\Projects\Game Store\src\main\java\com\gamestore\service\impl\WishlistServiceImpl.java
 D:\Projects\Game Store\src\main\java\com\gamestore\service\WishlistService.java

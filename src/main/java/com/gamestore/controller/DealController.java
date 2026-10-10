@@ -1,8 +1,10 @@
 package com.gamestore.controller;
 
 import com.gamestore.dto.response.DealResponse;
+import com.gamestore.dto.response.GameDetailInfo;
 import com.gamestore.dto.response.GameLookupResponse;
 import com.gamestore.service.DealAggregatorService;
+import com.gamestore.service.GameInformationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +18,11 @@ import java.util.List;
 public class DealController {
 
     private final DealAggregatorService dealAggregatorService;
+    private final GameInformationService gameInformationService;
 
-    public DealController(DealAggregatorService dealAggregatorService) {
+    public DealController(DealAggregatorService dealAggregatorService, GameInformationService gameInformationService) {
         this.dealAggregatorService = dealAggregatorService;
+        this.gameInformationService = gameInformationService;
     }
 
     @GetMapping
@@ -42,9 +46,21 @@ public class DealController {
 
     @GetMapping("/compare")
     public ResponseEntity<GameLookupResponse> compareDeals(
-            @RequestParam(name = "title") String title
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "gameId", required = false) String gameId,
+            @RequestParam(name = "steamAppId", required = false) String steamAppId
     ) {
-        GameLookupResponse lookup = dealAggregatorService.getGameDealsGrouped(title);
+        GameLookupResponse lookup = dealAggregatorService.getGameDealsGrouped(title, gameId, steamAppId);
         return ResponseEntity.ok(lookup);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<GameDetailInfo> getGameInfo(
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "gameId", required = false) String gameId,
+            @RequestParam(name = "steamAppId", required = false) String steamAppId
+    ) {
+        GameDetailInfo info = gameInformationService.getGameInformation(gameId, steamAppId, title);
+        return ResponseEntity.ok(info);
     }
 }
